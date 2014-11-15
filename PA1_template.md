@@ -8,6 +8,7 @@ output:
 
 ```r
 #setwd('Documents/Coursera/ReproducibleResearch/RepData_PeerAssessment1/')
+unzip("activity.zip")
 data <- read.csv('activity.csv')
 data$date<- as.Date(data$date,format='%Y-%m-%d')
 ```
@@ -17,17 +18,18 @@ data$date<- as.Date(data$date,format='%Y-%m-%d')
 require(plyr)
 sums=ddply(data,.(date),summarise,sums=sum(steps))$sums
 dailyStep <- data.frame(date=unique(data$date),totalDailySteps=sums)
-hist(dailyStep$totalDailySteps,ylab = 'Frequency',xlab = 'Total number of steps', main = ' Histogram of the total number of steps taken each day
-')
+#barplot better than Hist
+barplot(dailyStep$totalDailySteps,names.arg=dailyStep$date,ylab = 'Frequency',xlab = 'Total number of steps', main = ' Histogram of the total number of steps taken each day')
 ```
 
 ![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) 
 
 ```r
-totalsmean <- mean(dailyStep[! is.na(dailyStep$totalDailySteps),"totalDailySteps"])
+#hist(dailyStep$totalDailySteps,ylab = 'Frequency',xlab = 'Total number of steps', main =' Histogram of the total number of steps taken each day')
+totalsmean <- round(mean(dailyStep[! is.na(dailyStep$totalDailySteps),"totalDailySteps"]))
 totalsmedian <- median(dailyStep[! is.na(dailyStep$totalDailySteps),"totalDailySteps"])
 ```
-the mean total number of steps taken per day is 1.0766189 &times; 10<sup>4</sup> and 
+the mean total number of steps taken per day is 1.0766 &times; 10<sup>4</sup> and 
 the median total number of steps taken per day is 10765
 ## What is the average daily activity pattern?
 
@@ -63,17 +65,18 @@ for(row in 1:nrow(data)) {
 require(plyr)
 newSums=ddply(newData,.(date),summarise,sums=sum(steps))$sums
 newDailyStep <- data.frame(date=unique(newData$date),totalDailySteps=newSums)
-hist(newDailyStep$totalDailySteps,ylab = 'Frequency',xlab = 'Total number of steps', main = ' Histogram of the total number of steps taken each day
+#hist(newDailyStep$totalDailySteps,ylab = 'Frequency',xlab = 'Total number of steps', main = ' Histogram of the total number of steps taken each day')
+barplot(newDailyStep$totalDailySteps,names.arg = newDailyStep$date,ylab = 'Frequency',xlab = 'Total number of steps', main = ' Histogram of the total number of steps taken each day
 ')
 ```
 
 ![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png) 
 
 ```r
-newTotalsmean <- mean(newDailyStep$totalDailySteps)
-newTotalsmedian <- median(newDailyStep$totalDailySteps)
+newTotalsmean <- round(mean(newDailyStep$totalDailySteps))
+newTotalsmedian <-round( median(newDailyStep$totalDailySteps))
 ```
-From the new data the the mean and median total number of steps taken per day are: 1.0766189 &times; 10<sup>4</sup> and 1.0766189 &times; 10<sup>4</sup>
+From the new data the the mean and median total number of steps taken per day are: 1.0766 &times; 10<sup>4</sup> and 1.0766 &times; 10<sup>4</sup>
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
